@@ -115,7 +115,7 @@ The less the variance of the parameter estimates, the more optimized the experim
 
 % --------------------
 \section{Simulations}
-In alternate event related fMRI design such as an attention cueing experimental design, the event of most interest is the cue and the post- cue anticipatory period [cit]. So our simulations are based on detecting the cue and estimating the shape of evoked response to the cue. For simplicity, the simulations have only two events - a cue (C) followed by a target (T). Table 1 shows the event transition matrix for the designs simulated. A contrast matrix $C$ of [ 1 , 0 ] was used to assess the efficiency of detecting the cue with respect to the average baseline (\(\xi_d\)) and estimating the HRF (\(\xi_e\)).
+In alternate event related fMRI design such as an attention cueing experimental design, the event of most interest is the cue and the post- cue anticipatory period [cit]. So our simulations are based on detecting the cue and estimating the shape of evoked response to the cue. For simplicity, the simulations have only two events - a cue (C) followed by a target (T). Table 1 shows the event transition matrix for the designs simulated. A contrast matrix $C$ of [ 1 , 0 ] was used to assess the efficiency of detecting the cue with respect to the average baseline (\(\xi_d\)) and estimating the HRF (\(\xi_e\)). The canonical haemodynamic response function was used in all the simulations.
 
 
 
@@ -133,17 +133,19 @@ T     & 0.5 & 0.5 &                                  \\
 \end{table}
 
 \subsection{Simulation I}
-This simulation used event transition matrix showed in Table 1 to generate the event trains. Each trial consisted of a cue followed by a target. Here we demonstrate an exhaustive search over Stimulus Onset Asynchrony (SOA) and jitter for the effect of estimator efficiency (\(\xi\)). The efficiency of 20 x 20 = 400 design sequences was estimated as a function of lower and upper bounds of SOA. The SOA was jittered uniformly between the lower and upper bound of the SOA for that particular design sequence. Both the bounds ranged from 1 to 20s with an increment of 1. The TR was 2s with 294 acquisitions. The duration of HDRs simulated for each design sequence was 30s. These acquisition and modelling parameters were used in Simulation II as well.
+This simulation used event transition matrix showed in Table 1 to generate the event trains. Each trial consisted of a cue followed by a target. Here we demonstrate an exhaustive search over Stimulus Onset Asynchrony (SOA) and jitter and its effect on $\xi$. The efficiency of 20 x 20 = 400 design sequences was estimated as a function of lower and upper bounds of SOA. The SOA was jittered uniformly between the lower and upper bound of the SOA for that particular design sequence. Both the bounds ranged from 1 to 20s with an increment of 1. The entire simulation was iterated 100 times and the their mean efficiency was used as the population reference for each combination of bounds of SOA. The TR was 2s with 294 acquisitions. The duration of HDRs simulated for each design sequence was 30s long. These acquisition and modelling parameters were used in Simulation II as well.
 
 \subsection{Simulation II}
-Previous studies have suggested that inclusion of null events in the design sequence
+Previous studies have suggested that inclusion of null events in the design sequence facilitate the efficiency of a design sequence[cit]. This simulation investigates this postulation. $\xi$ was estimated as a function of proportion of null events in a design sequence. Since we are primarily focusing on optimizing the efficiency of cue events, we set targets as null i.e. in some trials the cue will not be followed by a target, we name these 'semi null trials'. The proportion is varied from 0\%  semi - null trials to 50\% semi - null trials. For this simulation, the lower bound of SOA was fixed at 2s while varying the upper bound from 2 to 20 s with an increment of 2.
+
+\section{Results}
 
 
 
 % --------------------
 \section{Discussion and Conclusions}
 % --------------------
-The neural underpinning of social decision making were investigated by analysing the fMRI data that was collected. We found that different areas of the brain get activated at a different level when the subject is making a decision based on self vs. when the decision is made on the behalf of someone else. We observed changes in different activation with the modulation of cognitive, social and environmental factors. The amygdala was activated in both situations of decision making for self and the other but we observed an increased activation when the time given to make a decision was less. This can be explained by increased information processing per se emotions and risk as to make the choice as early as possible weighing in the other factors like risk (\citet{ghods2009fundamental}; \citet{smith2009neural}; \citet{morrison2010re}). We further observed activations in the dmPFC which can be associated with value computations for decisions on behalf of oneslef and others(\citet{cohen2005functional}). This can be attributed to the precise computational functions during social learning (\citet{behrens2008associative};\citet{behrens2009computation}; \citet{hampton2008neural}). One of the simplest explanation of this effect can be that the region is simulating one's own, relevant and irrelevant preferences and and also alternatively processing one's own translation of preference and relevance to the other partner's perspective. Activation in the ACC reflected the involvement in reward anticipation and feedback during the risky choice (\citet{ernst2004choice}) and in our study it reflected the anticipation of the winning or losing when the decision was being made. 
+
 
 \medskip
 
