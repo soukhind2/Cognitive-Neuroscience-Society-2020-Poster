@@ -1,0 +1,152 @@
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Template for a conference paper, prepared for the
+%% Food and Resource Economics Department - IFAS
+%% UNIVERSITY OF FLORIDA
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Version 1.0 // November 2019
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Ariel Soto-Caro
+%%  - asotocaro@ufl.edu
+%%  - arielsotocaro@gmail.com
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[11pt]{article}
+\usepackage{UF_FRED_paper_style}
+\usepackage{subcaption} 
+
+\usepackage{lipsum}  %% Package to create dummy text (comment or erase before start)
+
+%% ===============================================
+%% Setting the line spacing (3 options: only pick one)
+% \doublespacing
+% \singlespacing
+\onehalfspacing
+\boldmath
+\usepackage{amsmath} 
+
+%% ===============================================
+
+\setlength{\droptitle}{-5em} %% Don't touch
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SET THE TITLE
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% TITLE:
+\title{Dissociable Systems for Social Decision Making under Risk and Time Complexity
+\thanks{Report written in fulfillment of requirements for PSC 290- Decision Neuroscience, WQ-2020, UC Davis}
+}
+
+% AUTHORS:
+\author{Soukhin Das\\% Name author
+    \href{mailto:skndas@ucdavis.edu}{\texttt{skndas@ucdavis.edu}} %% Email author 1 
+    }
+    
+% DATE:
+\date{\today}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ABSTRACT
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% BODY OF THE DOCUMENT
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% --------------------
+\section{Introduction}
+% --------------------
+
+Event related fMRI experimental designs have become increasingly popular in the recent years[cit] to measure the BOLD signal for visualizing human brain activity. The BOLD signal being slow and sluggish present significant issues in design and analysis of experiments. The challenge is to maximize the statistical efficiency per se to detect and estimate a signal. It is achieved by carefully choosing critical factors of the experimental design subject to constraints. A substantial improvement in efficiency is achieved by randomizing the order and timing of events in a design. This study focuses on a particular type of design where randomization cannot be employed, namely the alternating event related design which is typically used in an attention cueing experiment where events occur in a fixed and defined sequence like a trial by trial cue- target paradigm. [cit] We used a python package- fmrisim [cit] to investigate this optimization challenge and how critical factors like Stimulus Onset Asynchrony (SOA), frequency and semi-null trials affect the efficiency of an alternating design. The seamless simulation power of fmrisim to generate standardized, realistic simulation of fMRI data is used to understand how the varying parameters can be optimized to minimize the estimation of overlapping of events in alternating event related (AEr) design sequences.
+
+The goal in AEr fMRI experiments is often one of the two: detection or estimation of the signal. Detection represents the ability to detect the difference in brain activation between different conditions or groups, for instance, detecting an activation for cue or target in contrast to the baseline or another condition. Estimation on the other hand is how accurate the shape of the evoked response is (the haemodynamic response function, HRF). We show that these two goals are opposite to each other and an increase in one of them inevitably leads to a decrease in the other one.
+ 
+
+
+% --------------------
+\section{Methodology}
+% --------------------
+We assumed the general linear model as in Equation 1 as the underlying model for the neural mechanisms as the signal measured with fMRI is related to the neural signal via a convolution with a haemodynamic response function(HRF).
+
+\begin{equation}
+Y=X\beta+ \epsilon,\epsilon ~ N(0,\sigma)
+\end{equation}
+
+where $Y$ is the \textit{N x 1} voxel wise BOLD time series, $X$ is the \textit{N x k} design matrix (for $k$ events) which represents the expected response, $\beta$ is the response amplitude for each condition in $X$ and $\epsilon$ is the normally distributed error term $~ N(0,\sigma$).\par
+
+$Y$, the time course of voxel wise BOLD response is simulated using fmrisim. $Y$ is the combination of the evoked signal activity along with noise. Fmrisim can extract noise parameters directly from an fMRI dataset. The noise generated by fmrisim comprises of multiple components: drift and system noise related to the machine, auto regressive/moving average(ARMA), physiological and task noise related to the brain. In our study, we used the publicly available dataset [cit] to estimate the noise parameters.
+
+The efficiency of estimation is inversely related to the variance of the parameter estimates. Assuming independent errors, the unbiased estimate of the parameters is given by the least squares estimation, \(\hat{\beta} = (X' X)^{-1} X' Y \). Since fMRI noise show evidence of significant temporal autocorrelation, the errors in Equation 1 are dependent and correlated. So we used a prewhitening method so that the parameter estimate changes to,
+
+\begin{equation}
+    \hat{\beta} = ((KX)' (KX)^{-1}) (KX)' KY,
+\end{equation}
+
+where K is a decorrelating matrix such that \(KVK'\) is the identity matrix and $V$ is the correlation matrix of errors. We have the variance - covariance matrix of the parameter estimate as,
+
+\begin{equation}
+    cov(C\hat{\beta}) = \sigma^2 (Z'Z)^{-1} Z'KVK'Z(Z'Z)^{-1}
+\end{equation}
+
+where \(Z = KX\), the whitened designed matrix [cit]. Let $C$ be the contrast matrix of interest, the parameter estimate for the contrast changes to \(C\hat{\beta}\).\par
+
+Now after prewhitening, assuming unit variance (\(\sigma^2 = 1\)), and from the property of Moore–Penrose inverse (\(A^-=(A'A)^{-1}A'\)), equation 3 reduces to
+
+\begin{equation}
+    cov(\hat{\beta}) = CZ^-KVK'(Z^-)'C'
+\end{equation}
+
+The less the variance of the parameter estimates, the more optimized the experimental design is. So, equation 5 defines the efficiecny of a design.
+
+\begin{equation}
+    \xi = \frac{1} {trace\{cov(C\hat{\beta})\}}
+\end{equation}
+\\
+\(\xi\) is the detection power (\(\xi_d\)) if X is a convolved design matrix.\\
+\(\xi\) is the estimation efficiency (\(\xi_e\)) if X is a finite impulse response(FIR) matrix of the HRF.
+
+
+% --------------------
+\section{Simulations}
+In alternate event related fMRI design such as an attention cueing experimental design, the event of most interest is the cue and the post- cue anticipatory period [cit]. So our simulations are based on detecting the cue and estimating the shape of evoked response to the cue. For simplicity, the simulations have only two events - a cue (C) followed by a target (T). Table 1 shows the event transition matrix for the designs simulated. A contrast matrix $C$ of [ 1 , 0 ] was used to assess the efficiency of detecting the cue with respect to the average baseline (\(\xi_d\)) and estimating the HRF (\(\xi_e\)).
+
+
+
+\begin{table}[t]
+\centering
+\caption{Event Transition Matrix}
+\begin{tabular}{llll} 
+\hline
+Event & C   & T   & Example                          \\ 
+\hline
+C     & 0.5 & 0.5 & \multirow{2}{*}{CTCTCTCTCT....}  \\
+T     & 0.5 & 0.5 &                                  \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Simulation I}
+This simulation used event transition matrix showed in Table 1 to generate the event trains. Each trial consisted of a cue followed by a target. Here we demonstrate an exhaustive search over Stimulus Onset Asynchrony (SOA) and jitter for the effect of estimator efficiency (\(\xi\)). The efficiency of 20 x 20 = 400 design sequences was estimated as a function of lower and upper bounds of SOA. The SOA was jittered uniformly between the lower and upper bound of the SOA for that particular design sequence. Both the bounds ranged from 1 to 20s with an increment of 1. The TR was 2s with 294 acquisitions. The duration of HDRs simulated for each design sequence was 30s. These acquisition and modelling parameters were used in Simulation II as well.
+
+\subsection{Simulation II}
+Previous studies have suggested that inclusion of null events in the design sequence
+
+
+
+% --------------------
+\section{Discussion and Conclusions}
+% --------------------
+The neural underpinning of social decision making were investigated by analysing the fMRI data that was collected. We found that different areas of the brain get activated at a different level when the subject is making a decision based on self vs. when the decision is made on the behalf of someone else. We observed changes in different activation with the modulation of cognitive, social and environmental factors. The amygdala was activated in both situations of decision making for self and the other but we observed an increased activation when the time given to make a decision was less. This can be explained by increased information processing per se emotions and risk as to make the choice as early as possible weighing in the other factors like risk (\citet{ghods2009fundamental}; \citet{smith2009neural}; \citet{morrison2010re}). We further observed activations in the dmPFC which can be associated with value computations for decisions on behalf of oneslef and others(\citet{cohen2005functional}). This can be attributed to the precise computational functions during social learning (\citet{behrens2008associative};\citet{behrens2009computation}; \citet{hampton2008neural}). One of the simplest explanation of this effect can be that the region is simulating one's own, relevant and irrelevant preferences and and also alternatively processing one's own translation of preference and relevance to the other partner's perspective. Activation in the ACC reflected the involvement in reward anticipation and feedback during the risky choice (\citet{ernst2004choice}) and in our study it reflected the anticipation of the winning or losing when the decision was being made. 
+
+\medskip
+
+\bibliography{references.bib} 
+
+\end{document}
